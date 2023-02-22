@@ -47,9 +47,11 @@ impl ArrayBuilder for StringArrayBuilder {
     type Array = StringArray;
 
     fn with_capacity(capacity: usize) -> Self {
+        let mut offsets = Vec::with_capacity(capacity + 1);
+        offsets.push(0);
         Self {
             data: Vec::with_capacity(capacity),
-            offsets: Vec::with_capacity(capacity),
+            offsets,
             bitmap: BitVec::with_capacity(capacity),
         }
     }

@@ -8,15 +8,20 @@ pub use iterator::*;
 pub use primitive_array::*;
 pub use string_array::*;
 
+use crate::Scalar;
+
 /// [`Array`] is a collection of data of the some type
 pub trait Array: Send + Sync + Sized + 'static {
     /// Type of the item that can be retrieved from the [`Array`].
-    /// For example, we can get a `i32` from [`Int32Array`], while [`StringArray`] produces a `&str`.
+    /// For example, we can get a `i32` from [`I32Array`], while [`StringArray`] produces a `&str`.
     /// As we need a lifetime that is the same as `self` for `&str`, we use GAT here.
     type RefItem<'a>: Clone + Copy + Debug;
 
     /// The corresponding [`ArrayBuilder`] of this [`Array`]
     type Builder: ArrayBuilder<Array = Self>;
+
+    /// The owned item of this array
+    type OwnedItem: Scalar<ArrayType = Self>;
 
     /// Retrieve a reference to value
     fn get(&self, idx: usize) -> Option<Self::RefItem<'_>>;

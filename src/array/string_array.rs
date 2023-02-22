@@ -14,6 +14,7 @@ pub struct StringArray {
 impl Array for StringArray {
     type RefItem<'a> = &'a str;
     type Builder = StringArrayBuilder;
+    type OwnedItem = String;
 
     fn get(&self, idx: usize) -> Option<Self::RefItem<'_>> {
         if self.bitmap[idx] {
@@ -33,7 +34,7 @@ impl Array for StringArray {
     }
 }
 
-/// [`ArrayBuilder`] for the [`StringArray`]
+/// [`ArrayBuilder`] for [`StringArray`]
 pub struct StringArrayBuilder {
     /// The flattened data of string
     data: Vec<u8>,

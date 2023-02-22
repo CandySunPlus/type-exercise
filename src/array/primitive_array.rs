@@ -2,13 +2,13 @@ use std::fmt::Debug;
 
 use bitvec::vec::BitVec;
 
+use crate::Scalar;
+
 use super::{Array, ArrayBuilder, ArrayIterator};
 
 pub trait PrimitiveType: Copy + Send + Sync + Default + Debug + 'static {}
 
-#[allow(dead_code)]
 pub type I32Array = PrimitiveArray<i32>;
-#[allow(dead_code)]
 pub type F32Array = PrimitiveArray<f32>;
 
 impl PrimitiveType for i32 {}
@@ -21,9 +21,14 @@ pub struct PrimitiveArray<T: PrimitiveType> {
     bitmap: BitVec,
 }
 
-impl<T: PrimitiveType> Array for PrimitiveArray<T> {
+impl<T> Array for PrimitiveArray<T>
+where
+    T: PrimitiveType,
+    T: Scalar<ArrayType = Self>,
+{
     type RefItem<'a> = T;
     type Builder = PrimitiveArrayBuilder<T>;
+    type OwnedItem = T;
 
     fn get(&self, idx: usize) -> Option<Self::RefItem<'_>> {
         if self.bitmap[idx] {
@@ -50,7 +55,11 @@ pub struct PrimitiveArrayBuilder<T: PrimitiveType> {
     bitmap: BitVec,
 }
 
-impl<T: PrimitiveType> ArrayBuilder for PrimitiveArrayBuilder<T> {
+impl<T> ArrayBuilder for PrimitiveArrayBuilder<T>
+where
+    T: PrimitiveType,
+    T: Scalar<ArrayType = PrimitiveArray<T>>,
+{
     type Array = PrimitiveArray<T>;
 
     fn with_capacity(capacity: usize) -> Self {

@@ -2,7 +2,7 @@ use std::fmt::Debug;
 
 use bitvec::vec::BitVec;
 
-use crate::Scalar;
+use crate::{Scalar, ScalarRef};
 
 use super::{Array, ArrayBuilder, ArrayIterator};
 
@@ -25,6 +25,8 @@ impl<T> Array for PrimitiveArray<T>
 where
     T: PrimitiveType,
     T: Scalar<ArrayType = Self>,
+    for<'a> T: ScalarRef<'a, ScalarType = T, ArrayType = Self>,
+    for<'a> T: Scalar<RefType<'a> = T>,
 {
     type RefItem<'a> = T;
     type Builder = PrimitiveArrayBuilder<T>;
@@ -59,6 +61,8 @@ impl<T> ArrayBuilder for PrimitiveArrayBuilder<T>
 where
     T: PrimitiveType,
     T: Scalar<ArrayType = PrimitiveArray<T>>,
+    for<'a> T: ScalarRef<'a, ScalarType = T, ArrayType = PrimitiveArray<T>>,
+    for<'a> T: Scalar<RefType<'a> = T>,
 {
     type Array = PrimitiveArray<T>;
 
@@ -69,7 +73,7 @@ where
         }
     }
 
-    fn push(&mut self, value: Option<<Self::Array as Array>::RefItem<'_>>) {
+    fn push(&mut self, value: Option<T>) {
         match value {
             Some(v) => {
                 self.data.push(v);

@@ -1,5 +1,3 @@
-use std::fmt::Debug;
-
 mod iterator;
 mod primitive_array;
 mod string_array;
@@ -8,14 +6,17 @@ pub use iterator::*;
 pub use primitive_array::*;
 pub use string_array::*;
 
-use crate::Scalar;
+use crate::{Scalar, ScalarRef};
 
 /// [`Array`] is a collection of data of the some type
-pub trait Array: Send + Sync + Sized + 'static {
+pub trait Array: Send + Sync + Sized + 'static
+where
+    for<'a> Self::OwnedItem: Scalar<RefType<'a> = Self::RefItem<'a>>,
+{
     /// Type of the item that can be retrieved from the [`Array`].
     /// For example, we can get a `i32` from [`I32Array`], while [`StringArray`] produces a `&str`.
     /// As we need a lifetime that is the same as `self` for `&str`, we use GAT here.
-    type RefItem<'a>: Clone + Copy + Debug;
+    type RefItem<'a>: ScalarRef<'a, ScalarType = Self::OwnedItem, ArrayType = Self>;
 
     /// The corresponding [`ArrayBuilder`] of this [`Array`]
     type Builder: ArrayBuilder<Array = Self>;

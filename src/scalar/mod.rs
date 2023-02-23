@@ -1,6 +1,8 @@
 use std::fmt::Debug;
 
-use crate::{Array, F32Array, I32Array, StringArray};
+use crate::Array;
+
+mod impls;
 
 /// An owned single value
 ///
@@ -32,64 +34,26 @@ pub trait ScalarRef<'a>: Debug + Clone + Copy + Send + 'a {
     fn to_owned_scalar(&self) -> Self::ScalarType;
 }
 
-impl Scalar for i32 {
-    type ArrayType = I32Array;
-
-    type RefType<'a> = i32;
-
-    fn as_scalar_ref(&self) -> Self::RefType<'_> {
-        *self
-    }
+/// Encapsules all variables of [`Scalar`]
+pub enum ScalarImpl {
+    Int16(i16),
+    Int32(i32),
+    Int64(i64),
+    Float32(f32),
+    Float64(f64),
+    Bool(bool),
+    String(String),
 }
 
-impl<'a> ScalarRef<'a> for i32 {
-    type ArrayType = I32Array;
-
-    type ScalarType = i32;
-
-    fn to_owned_scalar(&self) -> Self::ScalarType {
-        *self
-    }
-}
-
-impl Scalar for f32 {
-    type ArrayType = F32Array;
-
-    type RefType<'a> = f32;
-
-    fn as_scalar_ref(&self) -> Self::RefType<'_> {
-        *self
-    }
-}
-
-impl<'a> ScalarRef<'a> for f32 {
-    type ArrayType = F32Array;
-
-    type ScalarType = f32;
-
-    fn to_owned_scalar(&self) -> Self::ScalarType {
-        *self
-    }
-}
-
-impl Scalar for String {
-    type ArrayType = StringArray;
-
-    type RefType<'a> = &'a str;
-
-    fn as_scalar_ref(&self) -> Self::RefType<'_> {
-        self.as_str()
-    }
-}
-
-impl<'a> ScalarRef<'a> for &'a str {
-    type ArrayType = StringArray;
-
-    type ScalarType = String;
-
-    fn to_owned_scalar(&self) -> Self::ScalarType {
-        self.to_string()
-    }
+/// Encapsules all variables of [`ScalarRef`]
+pub enum ScalarRefImpl<'a> {
+    Int16(i16),
+    Int32(i32),
+    Int64(i64),
+    Float32(f32),
+    Float64(f64),
+    Bool(bool),
+    String(&'a str),
 }
 
 #[cfg(test)]
@@ -139,5 +103,18 @@ mod tests {
         check_array_eq(&array, "233");
         let array = build_array_repeated_owned::<StringArray>("233".to_owned(), 5);
         check_array_eq(&array, "233");
+    }
+
+    #[test]
+    fn test_try_from_into() {
+        let i = 233_i32;
+        let j: ScalarImpl = i.into();
+        let k: ScalarRefImpl = i.into();
+
+        let i1: i32 = j.try_into().unwrap();
+        let i2: i32 = k.try_into().unwrap();
+
+        assert_eq!(i1, i);
+        assert_eq!(i2, i);
     }
 }

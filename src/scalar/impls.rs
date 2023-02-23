@@ -4,7 +4,7 @@ use crate::*;
 
 /// Implements dispatch function for [`Scalar`]
 macro_rules! impl_scalar_dispatch {
-    ([], $( { $Abc:ident, $abc:ident, $AbcArray:ty, $AbcArrayBuilder:ty, $Owned:ty, $Ref:ty } ),*) => {
+    ([], $({$Abc:ident, $abc:ident, $AbcArray:ty, $AbcArrayBuilder:ty, $Owned:ty, $Ref:ty}),*) => {
         impl ScalarImpl {
             /// Get identifier of the current array
             pub fn identifier(&self) -> &'static str {
@@ -22,7 +22,7 @@ for_all_variants! { impl_scalar_dispatch }
 
 /// Implements dispatch function for [`ScalarRef`]
 macro_rules! impl_scalar_ref_dispatch {
-    ([], $( { $Abc:ident, $abc:ident, $AbcArray:ty, $AbcArrayBuilder:ty, $Owned:ty, $Ref:ty }),*) => {
+    ([], $({$Abc:ident, $abc:ident, $AbcArray:ty, $AbcArrayBuilder:ty, $Owned:ty, $Ref:ty}),*) => {
         impl<'a> ScalarRefImpl<'a> {
             /// Get identifier of the current array
             pub fn identifier(&self) -> &'static str {
@@ -40,7 +40,7 @@ for_all_variants! { impl_scalar_ref_dispatch }
 
 /// Implements `TryFrom` and `From` for [`Scalar`] and [`ScalarRef`]
 macro_rules! impl_scalar_convision {
-    ([], $({ $Abc:ident, $abc:ident, $AbcArray:ty, $AbcArrayBuilder:ty, $Owned:ty, $Ref:ty }),*) => {
+    ([], $({$Abc:ident, $abc:ident, $AbcArray:ty, $AbcArrayBuilder:ty, $Owned:ty, $Ref:ty}),*) => {
         $(
             #[doc = concat!("Implement [`ScalarImpl`] -> [`", stringify!($Owned), "`], return [`TypeMismatch`] error if mismatch")]
             impl<'a> TryFrom<ScalarImpl> for $Owned {

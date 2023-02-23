@@ -3,7 +3,7 @@ use crate::*;
 
 /// Implements dispatch function for [`Array`]
 macro_rules! impl_array_dispatch {
-    ([], $( { $Abc:ident, $abc:ident, $AbcArray:ty, $AbcArrayBuilder:ty, $Owned: ty, $Ref:ty } ),*) => {
+    ([], $({$Abc:ident, $abc:ident, $AbcArray:ty, $AbcArrayBuilder:ty, $Owned: ty, $Ref:ty}),*) => {
         impl ArrayImpl {
             /// Get the value at the given index.
             pub fn get(&self, idx: usize) -> Option<ScalarRefImpl<'_>> {
@@ -49,7 +49,7 @@ for_all_variants! { impl_array_dispatch }
 
 /// Implements dispatch function for [`ArrayBuilder`]
 macro_rules! impl_array_builder_dispatch {
-    ([], $( { $Abc:ident, $abc:ident, $AbcArray:ty, $AbcArrayBuilder:ty, $Owned:ty, $Ref:ty } ),*) => {
+    ([], $({$Abc:ident, $abc:ident, $AbcArray:ty, $AbcArrayBuilder:ty, $Owned:ty, $Ref:ty}),*) => {
         impl ArrayBuilderImpl {
             /// Appends an element to the back of array
             pub fn push(&mut self, v: Option<ScalarRefImpl<'_>>) {
@@ -87,7 +87,7 @@ for_all_variants! { impl_array_builder_dispatch }
 
 /// Implements `TryFrom` and `From` for [`Array`]
 macro_rules! impl_array_conversion {
-    ([], $({ $Abc:ident, $abc:ident, $AbcArray:ty, $AbcArrayBuilder:ty, $Owned:ty, $Ref:ty }),*) => {
+    ([], $({$Abc:ident, $abc:ident, $AbcArray:ty, $AbcArrayBuilder:ty, $Owned:ty, $Ref:ty}),*) => {
         $(
             #[doc = concat!("Implement [`", stringify!($AbcArray), "`] -> [`ArrayImpl`]")]
             impl From<$AbcArray> for ArrayImpl {

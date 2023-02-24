@@ -2,9 +2,8 @@ use std::fmt::Debug;
 
 use bitvec::vec::BitVec;
 
-use crate::{ArrayImpl, Scalar, ScalarRef};
-
 use super::{Array, ArrayBuilder, ArrayIterator};
+use crate::{ArrayImpl, Scalar, ScalarRef};
 
 pub trait PrimitiveType: Copy + Send + Sync + Default + Debug + 'static {}
 

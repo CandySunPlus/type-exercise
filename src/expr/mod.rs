@@ -2,8 +2,9 @@
 
 use std::marker::PhantomData;
 
-use crate::{Array, ArrayBuilder, ArrayImpl, Scalar, TypeMismatch};
 use anyhow::Result;
+
+use crate::{Array, ArrayBuilder, ArrayImpl, Scalar, TypeMismatch};
 
 mod cmp;
 mod string;
@@ -63,11 +64,10 @@ where
 
 #[cfg(test)]
 mod tests {
-    use crate::{BoolArray, I32Array, I64Array, StringArray};
-
     use super::cmp::*;
     use super::string::*;
     use super::*;
+    use crate::{BoolArray, I32Array, I64Array, StringArray};
 
     fn check_array_eq<'a, A: Array>(array: &'a A, vec: &[Option<A::RefItem<'a>>])
     where

@@ -1,5 +1,4 @@
 use crate::macros::{for_all_primitive_variants, for_all_variants};
-
 use crate::*;
 
 /// Implements dispatch function for [`Scalar`]

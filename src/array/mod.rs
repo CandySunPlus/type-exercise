@@ -93,9 +93,8 @@ pub enum ArrayBuilderImpl {
 
 #[cfg(test)]
 mod tests {
-    use crate::TypeMismatch;
-
     use super::*;
+    use crate::TypeMismatch;
 
     /// Build an array from a vector of data
     fn build_array_from_vec<A: Array>(items: &[Option<A::RefItem<'_>>]) -> A {

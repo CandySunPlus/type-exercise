@@ -35,6 +35,7 @@ pub trait ScalarRef<'a>: Debug + Clone + Copy + Send + 'a {
 }
 
 /// Encapsules all variables of [`Scalar`]
+#[derive(Clone, Debug, PartialEq)]
 pub enum ScalarImpl {
     Int16(i16),
     Int32(i32),
@@ -46,6 +47,7 @@ pub enum ScalarImpl {
 }
 
 /// Encapsules all variables of [`ScalarRef`]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub enum ScalarRefImpl<'a> {
     Int16(i16),
     Int32(i32),

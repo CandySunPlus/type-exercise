@@ -4,6 +4,7 @@ pub mod macros;
 mod scalar;
 
 pub use array::*;
+pub use expr::*;
 pub use scalar::*;
 
 use thiserror::Error;

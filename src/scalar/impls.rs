@@ -88,7 +88,7 @@ macro_rules! impl_scalar {
     ([], $({$Abc:ident, $abc:ident, $AbcArray:ty, $AbcArrayBuilder:ty, $Owned:ty, $Ref:ty}),*) => {
         $(
             #[doc = concat!("Implement [`Scalar`] for primitive type [`", stringify!($Owned), "`].",
-            "Note that primitive types are both [`Scalar] and [`ScalarRef`] as they have little cost for copy.")]
+            "Note that primitive types are both [`Scalar`] and [`ScalarRef`] as they have little cost for copy.")]
             impl Scalar for $Owned {
                 type ArrayType = $AbcArray;
                 type RefType<'a> = $Ref;
@@ -98,7 +98,7 @@ macro_rules! impl_scalar {
             }
 
             #[doc = concat!("Implement [`ScalarRef`] for primitive type [`", stringify!($Ref), "`].",
-            "Note that primitive types are both [`Scalar] and [`ScalarRef`] as they have little cost for copy.")]
+            "Note that primitive types are both [`Scalar`] and [`ScalarRef`] as they have little cost for copy.")]
             impl<'a> ScalarRef<'a> for $Ref {
                 type ArrayType = $AbcArray;
                 type ScalarType = $Owned;
